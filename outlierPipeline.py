@@ -6,6 +6,8 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 save_at = os.path.join(script_dir,"output","dfsFlightHourDetails.csv")
 save_at2 = os.path.join(script_dir,"output","aircrewFlightHourPerMonthPerYear.csv")
 save_at3 = os.path.join(script_dir,"output","aircrewOutlierView.csv")
+save_at4 = os.path.join(script_dir,"output","outlierAggregationPerMonthPerUnion.csv")
+save_at5 = os.path.join(script_dir,"output","outlierAggregationPerMonthPerAircrewType.csv")
 file_path = os.path.join(script_dir,"input","dfsOutlierReport.csv")
 file_path2 = os.path.join(script_dir,"input","namelistAircrew.csv")
 file_path3 = os.path.join(script_dir,"input","insStructural.csv")
@@ -92,9 +94,11 @@ fh_merge = flightHourPerCrew[["KEY","totalFlightHour"]]
 df4 = pd.merge(df3,fh_merge,how="left",left_on="KEY_DFS",right_on="KEY")
 
 insStruct = pd.read_csv(file_path3, sep=";")
-insStruct["ID"] = insStruct["ID"].astype(str)
-insStruct["MONTH"] = insStruct["MONTH"].astype(str)
-insStruct["YEAR"] = insStruct["YEAR"].astype(str)
+
+cleanField4 = ["ID","MONTH","YEAR"]
+for field3 in cleanField4:
+    insStruct[field3] = insStruct[field3].astype(str)
+
 insStruct["KEY_INSSTR"] = insStruct["ID"] + "." + insStruct["MONTH"] + "." + insStruct["YEAR"]
 insStruct["KEY_INSSTR"] = insStruct["KEY_INSSTR"].astype(str)
 
@@ -112,11 +116,10 @@ df4["totalFlightHour"] = df4["totalFlightHour"].fillna(0.00)
 df4["totalFlightHour"] = df4["totalFlightHour"].astype(float)
 df4["totalFlightHour"] = df4["totalFlightHour"].round(2)
 
-df4["KEY_INSSTR"] = df4["KEY_INSSTR"].fillna("0")
-df4["KEY_INSSTR"] = df4["KEY_INSSTR"].astype(str)
-df4["STATUS"] = df4["STATUS"].fillna("0")
-df4["STATUS"] = df4["STATUS"].astype(str)
-
+cleanField5 = ["KEY_INSSTR","STATUS"]
+for field4 in cleanField5:
+    df4[cleanField5] = df4[cleanField5].fillna("0")
+    df4[cleanField5] = df4[cleanField5].astype(str)
 
 conditions4 = [
                (df4["totalFlightHour"] == 0.00) & (df4["STATUS"] == "0"),
@@ -159,8 +162,48 @@ choices3 = [
 
 df4["outlierType"] = np.select(conditions3,choices3,default="0")
 
+conditions4 = [(df4["POS"] == "CPT") & (df4["outlierType"] != "0"),
+               (df4["POS"] == "FO") & (df4["outlierType"] != "0"),
+               (df4["POS"] == "FA1") & (df4["outlierType"] != "0"),
+               (df4["POS"] == "FA") & (df4["outlierType"] != "0")
+]
+
+choices4 = ["cockpit",
+            "cockpit",
+            "cabin",
+            "cabin"
+]
+
+df4["aircrewType"] = np.select(conditions4,choices4,default="0")
+
+df4["assignableValidation"] = np.where(df4["aircrewType"] != "0","assignable","0")
+df4["assignableValidation"] = df4["assignableValidation"].astype(str)
+
+outlierCal = df4.groupby(["YEAR","MONTH","union"]).agg(
+    totalExponent = ("assignableValidation",lambda x: (x == "assignable").sum()),
+    totalOutlierAbove = ("outlierType",lambda x: (x == "outlierAbove").sum()),
+    totalOutlierBelow = ("outlierType",lambda x: (x == "outlierBelow").sum()),
+    totalDistributedExponent = ("outlierType",lambda x: (x == "distributedExponent").sum())
+).reset_index()
+
+outlierCal["outlierAbovePerc"] = round((outlierCal["totalOutlierAbove"] / outlierCal["totalExponent"]) * 100,2)
+outlierCal["outlierBelowPerc"] = round((outlierCal["totalOutlierBelow"] / outlierCal["totalExponent"]) * 100,2)
+outlierCal["distributedExponentPerc"] = round((outlierCal["totalDistributedExponent"] / outlierCal["totalExponent"]) * 100,2)
+
+outlierCal2 = df4.groupby(["YEAR","MONTH","aircrewType"]).agg(
+    totalExponent = ("assignableValidation",lambda x: (x == "assignable").sum()),
+    totalOutlierAbove = ("outlierType",lambda x: (x == "outlierAbove").sum()),
+    totalOutlierBelow = ("outlierType",lambda x: (x == "outlierBelow").sum()),
+    totalDistributedExponent = ("outlierType",lambda x: (x == "distributedExponent").sum())
+).reset_index()
+
+outlierCal2["outlierAbovePerc"] = round((outlierCal2["totalOutlierAbove"] / outlierCal2["totalExponent"]) * 100,2)
+outlierCal2["outlierBelowPerc"] = round((outlierCal2["totalOutlierBelow"] / outlierCal2["totalExponent"]) * 100,2)
+outlierCal2["distributedExponentPerc"] = round((outlierCal2["totalDistributedExponent"] / outlierCal2["totalExponent"]) * 100,2)
+
 df.to_csv(save_at,sep=";",index=False)
 flightHourPerCrew.to_csv(save_at2,sep=";",index=False)
 df4.to_csv(save_at3,sep=";",index=False)
+outlierCal.to_csv(save_at4,sep=";",index=False)
+outlierCal2.to_csv(save_at5,sep=";",index=False)
 
-#df.info()
