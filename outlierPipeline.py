@@ -58,10 +58,10 @@ def dataCleansing():
         df["Crew"].str.contains("FA", na=False)
     ]
 
-    choices2 = [df["Crew"].str[7:13],
-                df["Crew"].str[7:13],
-                df["Crew"].str[6:12],
-                df["Crew"].str[6:12]
+    choices2 = [df["Crew"].str[7:14],
+                df["Crew"].str[7:14],
+                df["Crew"].str[6:13],
+                df["Crew"].str[6:13]
     ]
     
     df["Crew"] = np.select(conditions2,choices2,default="0")
@@ -221,10 +221,12 @@ df4["assignableValidation"] = df4["assignableValidation"].astype(str)
 # Aggregation process
 outlierCal = df4.groupby(["YEAR","MONTH","union"]).agg(
     totalExponent = ("assignableValidation",lambda x: (x == "assignable").sum()),
+    totalBlockHour = ("totalFlightHour","sum"),
     totalOutlierAbove = ("outlierType",lambda x: (x == "outlierAbove").sum()),
     totalOutlierBelow = ("outlierType",lambda x: (x == "outlierBelow").sum()),
     totalDistributedExponent = ("outlierType",lambda x: (x == "distributedExponent").sum()),
-    standardDeviation = ("totalFlightHour","std")
+    standardDeviation = ("standardDeviation","mean"),
+    averageFlightHours = ("totalFlightHour","mean")
 ).reset_index()
 
 outlierCal["standardDeviation"] = outlierCal["standardDeviation"].astype(float)
@@ -233,13 +235,17 @@ outlierCal["standardDeviation"] = np.where(outlierCal["union"] == "0",outlierCal
 outlierCal["outlierAbovePerc"] = round((outlierCal["totalOutlierAbove"] / outlierCal["totalExponent"]) * 100,2)
 outlierCal["outlierBelowPerc"] = round((outlierCal["totalOutlierBelow"] / outlierCal["totalExponent"]) * 100,2)
 outlierCal["distributedExponentPerc"] = round((outlierCal["totalDistributedExponent"] / outlierCal["totalExponent"]) * 100,2)
+outlierCal["ceofficientVariant"] = round((outlierCal["standardDeviation"] / outlierCal["averageFlightHours"]) * 100,2)
+outlierCal["averageFlightHours"] = outlierCal["averageFlightHours"].astype(float)
+outlierCal["averageFlightHours"] = outlierCal["averageFlightHours"].round(2)
 
 outlierCal2 = df4.groupby(["YEAR","MONTH","aircrewType"]).agg(
     totalExponent = ("assignableValidation",lambda x: (x == "assignable").sum()),
     totalOutlierAbove = ("outlierType",lambda x: (x == "outlierAbove").sum()),
     totalOutlierBelow = ("outlierType",lambda x: (x == "outlierBelow").sum()),
     totalDistributedExponent = ("outlierType",lambda x: (x == "distributedExponent").sum()),
-    standardDeviation = ("totalFlightHour","std")
+    standardDeviation = ("standardDeviation","mean"),
+    totalBlockHour = ("totalFlightHour","sum")
 ).reset_index()
 
 outlierCal2["standardDeviation"] = outlierCal2["standardDeviation"].astype(float)
@@ -248,6 +254,9 @@ outlierCal2["standardDeviation"] = np.where(outlierCal2["aircrewType"] == "0",ou
 outlierCal2["outlierAbovePerc"] = round((outlierCal2["totalOutlierAbove"] / outlierCal2["totalExponent"]) * 100,2)
 outlierCal2["outlierBelowPerc"] = round((outlierCal2["totalOutlierBelow"] / outlierCal2["totalExponent"]) * 100,2)
 outlierCal2["distributedExponentPerc"] = round((outlierCal2["totalDistributedExponent"] / outlierCal2["totalExponent"]) * 100,2)
+outlierCal2["averageHours"] = outlierCal2["totalBlockHour"] / outlierCal2["totalExponent"]
+outlierCal2["averageHours"] = outlierCal2["averageHours"].astype(float)
+outlierCal2["averageHours"] = outlierCal2["averageHours"].round(2)
 
 # Producing the calculated reports
 df.to_csv(save_at,sep=";",index=False)
