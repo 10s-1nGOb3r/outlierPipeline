@@ -190,18 +190,18 @@ for field5 in cleanField6:
 conditions3 = [
                (df4["KEY"] == "0"),
                (df4["STATUS"] != "0"),
-               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "CPT") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 10.82) & (df4["totalFlightHour"] >= df4["Average"]),
-               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "CPT") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 10.82) & (df4["totalFlightHour"] < df4["Average"]),
-               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "CPT") & ((df4["totalFlightHour"] - df4["Average"]).abs() <= 10.82),
-               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FO") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 10.82) & (df4["totalFlightHour"] >= df4["Average"]),
-               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FO") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 10.82) & (df4["totalFlightHour"] < df4["Average"]),
-               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FO") & ((df4["totalFlightHour"] - df4["Average"]).abs() <= 10.82),
-               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FA1") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 10.82) & (df4["totalFlightHour"] >= df4["Average"]),
-               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FA1") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 10.82) & (df4["totalFlightHour"] < df4["Average"]),
-               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FA1") & ((df4["totalFlightHour"] - df4["Average"]).abs() <= 10.82),
-               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FA") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 10.82) & (df4["totalFlightHour"] >= df4["Average"]),
-               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FA") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 10.82) & (df4["totalFlightHour"] < df4["Average"]),
-               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FA") & ((df4["totalFlightHour"] - df4["Average"]).abs() <= 10.82)
+               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "CPT") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 10) & (df4["totalFlightHour"] >= df4["Average"]),
+               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "CPT") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 10) & (df4["totalFlightHour"] < df4["Average"]),
+               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "CPT") & ((df4["totalFlightHour"] - df4["Average"]).abs() <= 10),
+               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FO") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 10) & (df4["totalFlightHour"] >= df4["Average"]),
+               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FO") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 10) & (df4["totalFlightHour"] < df4["Average"]),
+               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FO") & ((df4["totalFlightHour"] - df4["Average"]).abs() <= 10),
+               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FA1") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 10) & (df4["totalFlightHour"] >= df4["Average"]),
+               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FA1") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 10) & (df4["totalFlightHour"] < df4["Average"]),
+               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FA1") & ((df4["totalFlightHour"] - df4["Average"]).abs() <= 10),
+               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FA") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 10) & (df4["totalFlightHour"] >= df4["Average"]),
+               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FA") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 10) & (df4["totalFlightHour"] < df4["Average"]),
+               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FA") & ((df4["totalFlightHour"] - df4["Average"]).abs() <= 10)
 ]
 
 choices3 = [
@@ -221,23 +221,59 @@ choices3 = [
             "distributedExponent"
 ]
 
-df4["outlierType"] = np.select(conditions3,choices3,default="0")
+df4["outlierTypeDV"] = np.select(conditions3,choices3,default="0")
+
+conditions7 = [
+               (df4["KEY"] == "0"),
+               (df4["STATUS"] != "0"),
+               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "CPT") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 7.42) & (df4["totalFlightHour"] >= df4["Average"]),
+               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "CPT") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 7.42) & (df4["totalFlightHour"] < df4["Average"]),
+               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "CPT") & ((df4["totalFlightHour"] - df4["Average"]).abs() <= 7.42),
+               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FO") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 7.42) & (df4["totalFlightHour"] >= df4["Average"]),
+               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FO") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 7.42) & (df4["totalFlightHour"] < df4["Average"]),
+               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FO") & ((df4["totalFlightHour"] - df4["Average"]).abs() <= 7.42),
+               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FA1") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 7.42) & (df4["totalFlightHour"] >= df4["Average"]),
+               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FA1") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 7.42) & (df4["totalFlightHour"] < df4["Average"]),
+               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FA1") & ((df4["totalFlightHour"] - df4["Average"]).abs() <= 7.42),
+               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FA") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 7.42) & (df4["totalFlightHour"] >= df4["Average"]),
+               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FA") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 7.42) & (df4["totalFlightHour"] < df4["Average"]),
+               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FA") & ((df4["totalFlightHour"] - df4["Average"]).abs() <= 7.42)
+]
+
+choices7 = [
+            "0",
+            "0",
+            "outlierAbove",
+            "outlierBelow",
+            "distributedExponent",
+            "outlierAbove",
+            "outlierBelow",
+            "distributedExponent",
+            "outlierAbove",
+            "outlierBelow",
+            "distributedExponent",
+            "outlierAbove",
+            "outlierBelow",
+            "distributedExponent"
+]
+
+df4["outlierType1"] = np.select(conditions7,choices7,default="0")
 
 conditions5 = [
                (df4["KEY"] == "0"),
                (df4["STATUS"] != "0"),
-               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "CPT") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 21.64) & (df4["totalFlightHour"] >= df4["Average"]),
-               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "CPT") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 21.64) & (df4["totalFlightHour"] < df4["Average"]),
-               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "CPT") & ((df4["totalFlightHour"] - df4["Average"]).abs() <= 21.64),
-               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FO") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 21.64) & (df4["totalFlightHour"] >= df4["Average"]),
-               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FO") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 21.64) & (df4["totalFlightHour"] < df4["Average"]),
-               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FO") & ((df4["totalFlightHour"] - df4["Average"]).abs() <= 21.64),
-               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FA1") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 23.76) & (df4["totalFlightHour"] >= df4["Average"]),
-               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FA1") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 23.76) & (df4["totalFlightHour"] < df4["Average"]),
-               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FA1") & ((df4["totalFlightHour"] - df4["Average"]).abs() <= 23.76),
-               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FA") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 23.76) & (df4["totalFlightHour"] >= df4["Average"]),
-               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FA") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 23.76) & (df4["totalFlightHour"] < df4["Average"]),
-               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FA") & ((df4["totalFlightHour"] - df4["Average"]).abs() <= 23.76)
+               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "CPT") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 14.84) & (df4["totalFlightHour"] >= df4["Average"]),
+               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "CPT") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 14.84) & (df4["totalFlightHour"] < df4["Average"]),
+               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "CPT") & ((df4["totalFlightHour"] - df4["Average"]).abs() <= 14.84),
+               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FO") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 14.84) & (df4["totalFlightHour"] >= df4["Average"]),
+               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FO") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 14.84) & (df4["totalFlightHour"] < df4["Average"]),
+               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FO") & ((df4["totalFlightHour"] - df4["Average"]).abs() <= 14.84),
+               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FA1") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 14.84) & (df4["totalFlightHour"] >= df4["Average"]),
+               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FA1") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 14.84) & (df4["totalFlightHour"] < df4["Average"]),
+               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FA1") & ((df4["totalFlightHour"] - df4["Average"]).abs() <= 14.84),
+               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FA") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 14.84) & (df4["totalFlightHour"] >= df4["Average"]),
+               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FA") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 14.84) & (df4["totalFlightHour"] < df4["Average"]),
+               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FA") & ((df4["totalFlightHour"] - df4["Average"]).abs() <= 14.84)
 ]
 
 choices5 = [
@@ -262,18 +298,18 @@ df4["outlierType2"] = np.select(conditions5,choices5,default="0")
 conditions6 = [
                (df4["KEY"] == "0"),
                (df4["STATUS"] != "0"),
-               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "CPT") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 32.46) & (df4["totalFlightHour"] >= df4["Average"]),
-               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "CPT") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 32.46) & (df4["totalFlightHour"] < df4["Average"]),
-               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "CPT") & ((df4["totalFlightHour"] - df4["Average"]).abs() <= 32.46),
-               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FO") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 32.46) & (df4["totalFlightHour"] >= df4["Average"]),
-               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FO") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 32.46) & (df4["totalFlightHour"] < df4["Average"]),
-               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FO") & ((df4["totalFlightHour"] - df4["Average"]).abs() <= 32.46),
-               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FA1") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 35.65) & (df4["totalFlightHour"] >= df4["Average"]),
-               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FA1") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 35.65) & (df4["totalFlightHour"] < df4["Average"]),
-               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FA1") & ((df4["totalFlightHour"] - df4["Average"]).abs() <= 35.65),
-               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FA") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 35.65) & (df4["totalFlightHour"] >= df4["Average"]),
-               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FA") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 35.65) & (df4["totalFlightHour"] < df4["Average"]),
-               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FA") & ((df4["totalFlightHour"] - df4["Average"]).abs() <= 35.65)
+               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "CPT") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 22.27) & (df4["totalFlightHour"] >= df4["Average"]),
+               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "CPT") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 22.27) & (df4["totalFlightHour"] < df4["Average"]),
+               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "CPT") & ((df4["totalFlightHour"] - df4["Average"]).abs() <= 22.27),
+               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FO") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 22.27) & (df4["totalFlightHour"] >= df4["Average"]),
+               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FO") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 22.27) & (df4["totalFlightHour"] < df4["Average"]),
+               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FO") & ((df4["totalFlightHour"] - df4["Average"]).abs() <= 22.27),
+               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FA1") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 22.27) & (df4["totalFlightHour"] >= df4["Average"]),
+               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FA1") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 22.27) & (df4["totalFlightHour"] < df4["Average"]),
+               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FA1") & ((df4["totalFlightHour"] - df4["Average"]).abs() <= 22.27),
+               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FA") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 22.27) & (df4["totalFlightHour"] >= df4["Average"]),
+               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FA") & ((df4["totalFlightHour"] - df4["Average"]).abs() > 22.27) & (df4["totalFlightHour"] < df4["Average"]),
+               (df4["KEY"] != "0") & (df4["STATUS"] == "0") & (df4["POS"] == "FA") & ((df4["totalFlightHour"] - df4["Average"]).abs() <= 22.27)
 ]
 
 choices6 = [
@@ -297,10 +333,10 @@ df4["outlierType3"] = np.select(conditions6,choices6,default="0")
 
 # Determining Aircrew Type exponents and Assignable exponents
 conditions4 = [
-               (df4["POS"] == "CPT") & (df4["outlierType"] != "0"),
-               (df4["POS"] == "FO") & (df4["outlierType"] != "0"),
-               (df4["POS"] == "FA1") & (df4["outlierType"] != "0"),
-               (df4["POS"] == "FA") & (df4["outlierType"] != "0")
+               (df4["POS"] == "CPT") & (df4["outlierTypeDV"] != "0"),
+               (df4["POS"] == "FO") & (df4["outlierTypeDV"] != "0"),
+               (df4["POS"] == "FA1") & (df4["outlierTypeDV"] != "0"),
+               (df4["POS"] == "FA") & (df4["outlierTypeDV"] != "0")
 ]
 
 choices4 = [
@@ -321,9 +357,12 @@ outlierCal = df4.groupby(["YEAR","MONTH","BASE","AC","POS","union"]).agg(
     totalBlockHour = ("totalFlightHour","sum"),
     standardDeviation = ("standardDeviation","mean"),
     averageFlightHours = ("totalFlightHour","mean"),
-    totalOutlierAboveSD1 = ("outlierType",lambda x: (x == "outlierAbove").sum()),
-    totalOutlierBelowSD1 = ("outlierType",lambda x: (x == "outlierBelow").sum()),
-    totalDistributedExponentSD1 = ("outlierType",lambda x: (x == "distributedExponent").sum()),
+    totalOutlierAboveSDDV = ("outlierTypeDV",lambda x: (x == "outlierAbove").sum()),
+    totalOutlierBelowSDDV = ("outlierTypeDV",lambda x: (x == "outlierBelow").sum()),
+    totalDistributedExponentSDDV = ("outlierTypeDV",lambda x: (x == "distributedExponent").sum()),
+    totalOutlierAboveSD1 = ("outlierType1",lambda x: (x == "outlierAbove").sum()),
+    totalOutlierBelowSD1 = ("outlierType1",lambda x: (x == "outlierBelow").sum()),
+    totalDistributedExponentSD1 = ("outlierType1",lambda x: (x == "distributedExponent").sum()),
     totalOutlierAboveSD2 = ("outlierType2",lambda x: (x == "outlierAbove").sum()),
     totalOutlierBelowSD2 = ("outlierType2",lambda x: (x == "outlierBelow").sum()),
     totalDistributedExponentSD2 = ("outlierType2",lambda x: (x == "distributedExponent").sum()),
@@ -338,6 +377,9 @@ outlierCal["standardDeviation"] = np.where(outlierCal["union"] == "0",outlierCal
 outlierCal["ceofficientVariant"] = round((outlierCal["standardDeviation"] / outlierCal["averageFlightHours"]) * 100,2)
 outlierCal["averageFlightHours"] = outlierCal["averageFlightHours"].astype(float)
 outlierCal["averageFlightHours"] = outlierCal["averageFlightHours"].round(2)
+outlierCal["outlierAbovePercSDDV"] = round((outlierCal["totalOutlierAboveSDDV"] / outlierCal["totalExponent"]) * 100,2)
+outlierCal["outlierBelowPercSDDV"] = round((outlierCal["totalOutlierBelowSDDV"] / outlierCal["totalExponent"]) * 100,2)
+outlierCal["distributedExponentPercSDDV"] = round((outlierCal["totalDistributedExponentSDDV"] / outlierCal["totalExponent"]) * 100,2)
 outlierCal["outlierAbovePercSD1"] = round((outlierCal["totalOutlierAboveSD1"] / outlierCal["totalExponent"]) * 100,2)
 outlierCal["outlierBelowPercSD1"] = round((outlierCal["totalOutlierBelowSD1"] / outlierCal["totalExponent"]) * 100,2)
 outlierCal["distributedExponentPercSD1"] = round((outlierCal["totalDistributedExponentSD1"] / outlierCal["totalExponent"]) * 100,2)
@@ -350,12 +392,15 @@ outlierCal["distributedExponentPercSD3"] = round((outlierCal["totalDistributedEx
 
 outlierCal2 = df4.groupby(["YEAR","MONTH","aircrewType"]).agg(
     totalExponent = ("assignableValidation",lambda x: (x == "assignable").sum()),
-    totalDistributedExponent = ("outlierType",lambda x: (x == "distributedExponent").sum()),
+    totalDistributedExponent = ("outlierTypeDV",lambda x: (x == "distributedExponent").sum()),
     standardDeviation = ("standardDeviation","mean"),
     totalBlockHour = ("totalFlightHour","sum"),
-    totalOutlierAboveSD1 = ("outlierType",lambda x: (x == "outlierAbove").sum()),
-    totalOutlierBelowSD1 = ("outlierType",lambda x: (x == "outlierBelow").sum()),
-    totalDistributedExponentSD1 = ("outlierType",lambda x: (x == "distributedExponent").sum()),
+    totalOutlierAboveSDDV = ("outlierTypeDV",lambda x: (x == "outlierAbove").sum()),
+    totalOutlierBelowSDDV = ("outlierTypeDV",lambda x: (x == "outlierBelow").sum()),
+    totalDistributedExponentSDDV = ("outlierTypeDV",lambda x: (x == "distributedExponent").sum()),
+    totalOutlierAboveSD1 = ("outlierType1",lambda x: (x == "outlierAbove").sum()),
+    totalOutlierBelowSD1 = ("outlierType1",lambda x: (x == "outlierBelow").sum()),
+    totalDistributedExponentSD1 = ("outlierType1",lambda x: (x == "distributedExponent").sum()),
     totalOutlierAboveSD2 = ("outlierType2",lambda x: (x == "outlierAbove").sum()),
     totalOutlierBelowSD2 = ("outlierType2",lambda x: (x == "outlierBelow").sum()),
     totalDistributedExponentSD2 = ("outlierType2",lambda x: (x == "distributedExponent").sum()),
@@ -371,6 +416,9 @@ outlierCal2["distributedExponentPerc"] = round((outlierCal2["totalDistributedExp
 outlierCal2["averageHours"] = outlierCal2["totalBlockHour"] / outlierCal2["totalExponent"]
 outlierCal2["averageHours"] = outlierCal2["averageHours"].astype(float)
 outlierCal2["averageHours"] = outlierCal2["averageHours"].round(2)
+outlierCal2["outlierAbovePercSDDV"] = round((outlierCal2["totalOutlierAboveSDDV"] / outlierCal2["totalExponent"]) * 100,2)
+outlierCal2["outlierBelowPercSDDV"] = round((outlierCal2["totalOutlierBelowSDDV"] / outlierCal2["totalExponent"]) * 100,2)
+outlierCal2["distributedExponentPercSDDV"] = round((outlierCal2["totalDistributedExponentSDDV"] / outlierCal2["totalExponent"]) * 100,2)
 outlierCal2["outlierAbovePercSD1"] = round((outlierCal2["totalOutlierAboveSD1"] / outlierCal2["totalExponent"]) * 100,2)
 outlierCal2["outlierBelowPercSD1"] = round((outlierCal2["totalOutlierBelowSD1"] / outlierCal2["totalExponent"]) * 100,2)
 outlierCal2["distributedExponentPercSD1"] = round((outlierCal2["totalDistributedExponentSD1"] / outlierCal2["totalExponent"]) * 100,2)
