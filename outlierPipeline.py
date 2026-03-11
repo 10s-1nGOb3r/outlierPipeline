@@ -187,6 +187,16 @@ cleanField6 = ["Average","standardDeviation"]
 for field5 in cleanField6:
     df4[field5] = np.where(df4["union"] == "0",df4[field5] == "0",df4[field5])
 
+df4["distanceAverageToFlightHours"] = df4["standardDeviation"] * 1.28
+df4["distanceAverageToFlightHours2"] = df4["standardDeviation"] * 2
+df4["distanceAverageToFlightHours3"] = df4["standardDeviation"] * 3
+
+cleanField8 = ["distanceAverageToFlightHours","distanceAverageToFlightHours2","distanceAverageToFlightHours3"]
+for field7 in cleanField8:
+    df4[field7] = df4[field7].fillna(0.00)
+    df4[field7] = df4[field7].astype(float)
+    df4[field7] = df4[field7].round(2)
+
 distanceAverageToFlightHours = df4["standardDeviation"] * 1.28
 distanceAverageToFlightHours2 = df4["standardDeviation"] * 2
 distanceAverageToFlightHours3 = df4["standardDeviation"] * 3
